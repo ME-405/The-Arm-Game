@@ -33,5 +33,6 @@ Solenoid ROB-11015 https://www.digikey.com/en/products/detail/sparkfun-electroni
 Pittperson Gearmotors https://www.ebay.com/itm/144350295705?hash=item219bf2b699:g:6eIAAOSwj59hzPha
 
 # System Sketch
-![Model](Images/rough%20model.png)
+![Model](Images/rough_model.png)
+![Model Back](Images/rough_model_back.png)
 
