@@ -29,3 +29,6 @@ The arm will contain a calibrate function that will zero the base by lining up a
 
 Solenoid ROB-11015 https://www.digikey.com/en/products/detail/sparkfun-electronics/ROB-11015/6163694
 3.5mm Stroke, 80 g force (Yes I hate those units too)
+
+Pittperson Gearmotors https://www.ebay.com/itm/144350295705?hash=item219bf2b699:g:6eIAAOSwj59hzPha
+
