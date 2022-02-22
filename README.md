@@ -2,6 +2,9 @@
 
 Jacob Bograd, Nick De Simone, Horacio Albarran
 
+## Documentation
+ https://me-405.github.io/The-Arm-Game/
+
 ## Proposal
 
 Our goal is to create a robotic arm that a user can control using a game controller. The Controller will communicate to the host computer over a library from GitHub. The Host controller will then interoperate the controller inputs and send them to the Nucleo. The Nucleo will read the inputs and update the respective motor PWM values. The Nucleo will then send the encoder values back to the computer. All of the calculations will be handled on the computer side the Nucleo will only be setting the PWM values for the respective motors. 
@@ -22,16 +25,17 @@ The arm will contain a calibrate function that will zero the base by lining up a
 |  1   | Game Controller             | Jacob's Toolbox       |   59.99   |
 |  1   | Gear [If needed]            | 3-D printed           |     -     |
 |  7   | M4 bolt and nuts            | Ace Hardware          |     -     |
-
-
-
-
+|  1   | Ping Pong ball              | Undefined             |     -     |
 
 # Part List
-
 Pittperson Gearmotors https://www.ebay.com/itm/144350295705?hash=item219bf2b699:g:6eIAAOSwj59hzPha
 
 # System Sketch
 ![Model](Images/rough_model.png)
 ![Model Back](Images/rough_model_back.png)
+
+# Table Sketch
+The following model was constructed to be able to catch the ping pong ball in a safe manner.
+![Model](Images/Table_Design.png)
+
 
