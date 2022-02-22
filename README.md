@@ -12,23 +12,22 @@ The arm will contain a calibrate function that will zero the base by lining up a
 
 # Bill of materials
 
-| Qty. | Part                  | Source                | Est. Cost |
-|:----:|:----------------------|:----------------------|:---------:|
-|  2   | Pittperson Gearmotors | ME405 Tub             |     -     |
-|  1   | Nucleo with Shoe      | ME405 Tub             |     -     |
-|  1   | Solenoid              | DigiKey               |   4.95    |
-|  1   | Solenoid Driver       | ???????               |   ??????  |
-|  2   | Arms                  | ????????              |   ??????  |
-|  1   | Game Controller       | Jacob's Toolbox       |   59.99   |
-|  ?   | Gears                 | ????????              |   ??????  |
+| Qty. | Part                        | Source                | Est. Cost |
+|:----:|:----------------------------|:----------------------|:---------:|
+|  2   | Pittperson Gearmotors       | ME405 Tub             |     -     |
+|  1   | Nucleo with Shoe            | ME405 Tub             |     -     |
+|  4   | MG996R Servos[Package]      | Amazon                |   26.99   |
+|  4   | SG90 Micro Servo [Package]  | Amazon                |  Unknown  |
+|  1   | Arm Structure and Base      | Bonderson's Building  |     -     |
+|  1   | Game Controller             | Jacob's Toolbox       |   59.99   |
+|  1   | Gear [If needed]            | 3-D printed           |     -     |
+|  7   | M4 bolt and nuts            | Ace Hardware          |     -     |
+
 
 
 
 
 # Part List
-
-Solenoid ROB-11015 https://www.digikey.com/en/products/detail/sparkfun-electronics/ROB-11015/6163694
-3.5mm Stroke, 80 g force (Yes I hate those units too)
 
 Pittperson Gearmotors https://www.ebay.com/itm/144350295705?hash=item219bf2b699:g:6eIAAOSwj59hzPha
 
