@@ -2,6 +2,9 @@
 
 Jacob Bograd, Nick De Simone, Horacio Albarran
 
+## Documentation
+ https://me-405.github.io/The-Arm-Game/
+
 ## Proposal
 
 Our goal is to create a robotic arm that a user can control using a game controller. The Controller will communicate to the host computer over a library from GitHub. The Host controller will then interoperate the controller inputs and send them to the Nucleo. The Nucleo will read the inputs and update the respective motor PWM values. The Nucleo will then send the encoder values back to the computer. All of the calculations will be handled on the computer side the Nucleo will only be setting the PWM values for the respective motors. 
