@@ -34,7 +34,7 @@ Pittperson Gearmotors https://www.ebay.com/itm/144350295705?hash=item219bf2b699:
 ![Model](Images/rough_model.png)
 ![Model Back](Images/rough_model_back.png)
 
-# Table Sketch
+# Catching Table Sketch
 The following model was constructed to be able to catch the ping pong ball in a safe manner.
 ![Model](Images/Table_Design.png)
 
