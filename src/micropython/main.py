@@ -73,7 +73,7 @@ class robotic_arm:
         self.endpoint = None
         self.new_values = False  # we do not have any new values to read
         self.mail = False  # we do not have any mail from the computer
-
+    # TODO ADD DOXY
     def read_uart(self):
         if self.uart.any():  # check if there is something in the pipeline
             self.command = self.uart.read().split(",")  # read the entire uart buss and split on ,
@@ -82,7 +82,7 @@ class robotic_arm:
             self.mail = True  # we have some mail to sort through
         else:
             self.mail = False  # we have no new mail
-
+    # TODO ADD DOXY
     def calculate_parameters(self):
         # The format is X,Y,Z,CLAW
 

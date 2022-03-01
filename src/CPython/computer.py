@@ -1,6 +1,7 @@
 import pygame
 import serial
 import time
+
 # TODO MAKE THIS OUR OWN CODE THIS IS EXAMPLE CODE
 
 # constants
@@ -8,7 +9,8 @@ XLIMIT = 10
 YLIMIT = 10
 ZLIMIT = 10
 debug = False
-#setup the UART
+ACK = False
+# setup the UART
 try:
     uart = serial.Serial(port='com3', baudrate=115273, timeout=1)
     # reset the Microcontroller
@@ -20,7 +22,7 @@ except serial.serialutil.SerialException:
     print("INVALID UART, ENTERING DEBUGGING MODE")
     debug = True
 
-#TODO CLEAN UP BELOW
+# TODO CLEAN UP BELOW
 
 # Define some colors.
 BLACK = pygame.Color('black')
@@ -151,7 +153,7 @@ while not done:
 
         # L2 (Axis 4) is Z axis
         # 0 is ground 2 is max vertical
-        Zaxis = round(((-1 * joystick.get_axis(3))) + Zaxis, 1)  # Negative 1 because joystick is backwards
+        Zaxis = round((-1 * joystick.get_axis(3)) + Zaxis, 1)  # Negative 1 because joystick is backwards
 
         # check that the axis are not at their limit
 
@@ -174,8 +176,14 @@ while not done:
 
         if debug:
             textPrint.tprint(screen, "!!!DEBUG MODE, NOT CONNECTED TO MICROCONTROLLER!!!")
-        else: # do uart stuff
-            uart.write(None)
+        elif ACK:  # The Microcontroller is ready for another packet
+            packet = [Xaxis, Yaxis, Zaxis, claw]
+            uart.write(packet)  # send the packet over to the
+            ACK = False  # Wait for the microcontroller to be ready for another packet
+        else:  # check if the Microcontroller is ready for another packet
+            if uart.read() == "ACK":
+                ACK = True  # it is ready for another packet
+
         # END OF ME405 SECTION
         #########################################################################
 

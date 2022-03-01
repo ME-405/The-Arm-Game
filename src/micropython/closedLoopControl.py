@@ -26,7 +26,7 @@ class ClosedLoopController:
         @param   encoder set the parameter given for the chosen encoder
         @param   MotorDriver provides with the chosen motor
         '''
-
+        # TODO Document these class members
         # Setting some parameters
         self.done = 0
         self.final_point = 0
@@ -47,7 +47,7 @@ class ClosedLoopController:
         # Setting arrays to store data
         self.time_list = []
         self.encoder_list = []
-
+    # TODO CHECK IF THIS IS NEEDED
     def update_setpoint(self):
         '''!
         @details It sets the desired position of the encoder in ticks
@@ -87,7 +87,7 @@ class ClosedLoopController:
         self.encoder_list.append(encoder_value)
 
     # print("DEBUG: ", timestamp, encoder_value)
-
+    # TODO CHECK IF THIS IS NEEDED
     def update_kp(self):
         '''!
         @details It ask for the user's input for the variable kp
@@ -98,7 +98,7 @@ class ClosedLoopController:
         # print('and press "S" to provide with a new command while collecting data')
         # print(' "P" to plot the data, and "S" to start collecting data from zero')
         self.K_p = input('Provide with input for K_p:  ')
-
+    # TODO CHECK IF THIS IS NEEDED
     def print_list(self):
         '''!
         @details It provides with the numerical values for the encoder positions as
@@ -113,7 +113,7 @@ class ClosedLoopController:
         # clear the different lists
         self.time_list.clear()
         self.encoder_list.clear()
-
+    # TODO CHECK IF THIS IS NEEDED
     def input_kp(self):
         '''!
             @details This functions is used for the computer interface interaction
@@ -121,7 +121,7 @@ class ClosedLoopController:
         while self.uart.any == 0:
             utime.sleep_us(50)
         self.kp = self.uart.read()
-
+    # TODO clean this function up
     def control_algorithm(self):
         '''!
         @details It manages the value for kp as well as setting different
