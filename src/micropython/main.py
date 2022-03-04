@@ -4,19 +4,17 @@
 '''
 
 #  Importing libraries and classes
-import utime
+from servo import Servo
 from Motor import MotorDriver
 from encoder import Encoder
 from closedLoopControl import ClosedLoopController as closed_loop
-from pyb import Pin
 from pyb import Servo
 from pyb import UART
 import pyb
 import gc
 import cotask
 import task_share
-
-
+import math
 
 # Instantiated object for the encoder as well as timer,
 encoderPin1 = pyb.Pin(pyb.Pin.board.PC6)
@@ -32,19 +30,46 @@ motorTimer = pyb.Timer(3, freq=20000)
 Motor = MotorDriver(motorEnable1, motor1Pin1, motor1Pin2, motorTimer, 1, 2)
 input_interval = 10
 
+DEFAULTANGLE = 0  # the default angle
+
 
 # Instantiated the objects for the servos
 
 
-# TODO SETUP THE CLASSES IN MAIN
 def main():
     '''!
     @breif This is the main function that the MCU runs  whenever it is restarted
     '''
-    pass
+    # start by creating a share and queue
+
+    arm = RoboticArm()  # make a new robotic arm
+
+    # I am not sure if the share and queue are needed
+    share = task_share.Share('h', thread_protect=False, name="Share")
+    queue = task_share.Queue('L', 16, thread_protect=False, overwrite=False,
+                             name="Queue")
+    per_val = 5
+    read_task = cotask.Task(arm.read_uart, name='read', priority=1, period=per_val, profile=False, trace=False)
+    calculate_task = cotask.Task(arm.calculate_parameters, name='calculate', priority=1, period=per_val, profile=False,
+                                 trace=False)
+    upadate_task = cotask.Task(arm.update_parameters, name='update', priority=1, period=per_val, profile=False,
+                               trace=False)
+    clc_task = cotask.Task(arm.clc_passthrough(), name='clc', priority=1, period=per_val, profile=False, trace=False)
+    # append all of the tasks to the task list
+    cotask.task_list.append(read_task)
+    cotask.task_list.append(calculate_task)
+    cotask.task_list.append(upadate_task)
+    cotask.task_list.append(clc_task)
+
+    # run the garbace collector
+    gc.collect()
+
+    # run the scheduler with round robin since everything is the same
+    while True:
+        cotask.task_list.rr_sched()  # this will never end, I thin this is fine
 
 
-class robotic_arm:
+class RoboticArm:
     def __init__(self, uart_channel=1, baudrate=9600):
         '''!
         @brief TODO
@@ -65,51 +90,66 @@ class robotic_arm:
         self.command = None  # set the command to nothing
         # make the 4 servo objects, the pins are hardcoded
         # The setup for the pins might not be correct
-        self.servo0 = pyb.Servo(pyb.Pin(pyb.Pin.board.PA5))  # The lower arm servo
-        self.servo1 = pyb.Servo(pyb.Pin(pyb.Pin.board.PA6))  # The middle arm servo
-        self.servo2 = pyb.Servo(pyb.Pin(pyb.Pin.board.PA7))  # The upper arm servo
-        self.servo3 = pyb.Servo(pyb.Pin(pyb.Pin.board.PB6))  # The claw servo
-        self.angles = [None, None, None, None]
-        self.endpoint = None
+        self.servo0 = Servo(pyb.Pin(pyb.Pin.board.PA6), 3, 1)  # The lower arm servo
+        # TODO Add the next 3 servos THESE ARE NOT CURRENTLY CORRECT
+        self.servo1 = Servo(pyb.Pin(pyb.Pin.board.PA6), 3, 1)  # The middle arm servo
+        self.servo2 = Servo(pyb.Pin(pyb.Pin.board.PA7), 3, 1)  # The upper arm servo
+        self.servo3 = Servo(pyb.Pin(pyb.Pin.board.PB6), 3, 1)  # The claw servo
+        self.angles = [DEFAULTANGLE, DEFAULTANGLE, DEFAULTANGLE, DEFAULTANGLE]  # set all of the angles to default
+        self.endpoint = DEFAULTANGLE  # Set the default endpoint
         self.new_values = False  # we do not have any new values to read
         self.mail = False  # we do not have any mail from the computer
+        # TODO FIND THE CONVERSION FACTOR
+        self.conversion_factor = 5  # The conversion factor from angle to encoder ticks
+
     # TODO ADD DOXY
     def read_uart(self):
-        if self.uart.any():  # check if there is something in the pipeline
-            self.command = self.uart.read().split(",")  # read the entire uart buss and split on ,
-            print('ACK')  # tell the computer you received the packet and it can send another one. TODO CHECK IF
-            # NECESSARY
-            self.mail = True  # we have some mail to sort through
-        else:
-            self.mail = False  # we have no new mail
+        while True:
+            if self.uart.any():  # check if there is something in the pipeline
+                self.command = self.uart.read().split(',')  # read the entire uart buss and split on ,
+                print('ACK')  # tell the computer you received the packet and it can send another one. TODO CHECK IF
+                # NECESSARY
+                self.mail = True  # we have some mail to sort through
+            else:
+                self.mail = False  # we have no new mail
+
     # TODO ADD DOXY
     def calculate_parameters(self):
         # The format is X,Y,Z,CLAW
-
-        # TODO take the points and make them parameters
-        if self.mail:
-            #  TODO do math to find the angles
-            self.angle[3] = self.command[3]  # this is hardcoded to be like this
-            pass
-        pass
+        while True:
+            # TODO take the points and make them parameters
+            if self.mail:
+                #  TODO do math to find the angles
+                #  Get the base angles
+                radians = math.atan2(self.command[1], self.command[0])  # get the angle in radians
+                self.endpoint = radians * self.conversion_factor  # convert the angle to encoder ticks
+                # TODO add the math for the angles
+                self.angles[0] = 5
+                self.angles[1] = 5
+                self.angles[2] = self.command[3]  # get the claw pitch value
+                self.angles[3] = self.command[4]  # get the claw close value
+            yield 0  # send it back for another task to take over
 
     def update_parameters(self):
-        # TODO UPADTE THE PARAMETERS ONCE WE FIND THEM OUT.
-        if self.new_values:
-            # update the servo angles
-            try:
-                self.servo0.angle(self.angles[0])
-                self.servo1.angle(self.angles[1])
-                self.servo2.angle(self.angles[2])
-                self.servo3.angle(self.angles[3])
-                # update the base endpoint
-                self.clc.update_setpoint(self.endpoint)
-            except Exception:  # TODO FIND the exact exception to catch
-                print("INVALID ANGLE DETECTED")  # tell the computer something went wrong
-                # move on with your life
+        # TODO UPDATE THE PARAMETERS ONCE WE FIND THEM OUT.
 
-        else:
-            pass  # nothing needs to be done
+        while True:
+            if self.new_values:
+                # update the servo angles
+                self.servo0.SetAngleRadian(self.angles[0])
+                self.servo1.SetAngleRadian(self.angles[1])
+                self.servo2.SetAngleRadian(self.angles[2])
+                self.servo3.SetAngleRadian(self.angles[3])
+                # update the base endpoint
+                self.clc.final_point = self.endpoint
+
+            else:
+                manual_breathing = 1  # you are now manually breathing
+            yield 0  # let another function have it sturn
+
+    # this is just a simple passthrough to run the clc update
+    def clc_passthrough(self):
+        self.clc.control_algorithm()
 
     def zero_encoder(self):  # TODO CHECK IS THIS IS NESSARY
         '''!
