@@ -9,15 +9,16 @@ XLIMIT = 10
 YLIMIT = 10
 ZLIMIT = 10
 debug = False
-ACK = False
+ACK = True
 # setup the UART
 try:
-    uart = serial.Serial(port='com3', baudrate=115273, timeout=1)
+    uart_to_micro = serial.Serial(port='com5', baudrate=115273, timeout=0.25)
     # reset the Microcontroller
-    uart.write(b'\x03')  # send Ctr+C
+    uart_to_micro.write(b'\x03')  # send Ctr+C
     time.sleep(0.5)  # sleep for half a second
-    uart.write(b'\x04')  # send Ctrl+D
+    uart_to_micro.write(b'\x04')  # send Ctrl+D
     time.sleep(0.5)
+    debug = False
 except serial.serialutil.SerialException:
     print("INVALID UART, ENTERING DEBUGGING MODE")
     debug = True
@@ -77,7 +78,7 @@ textPrint = TextPrint()
 Xaxis = 0
 Yaxis = 0
 Zaxis = 0  # start off as zero
-
+to_print = "Nothing Yet"
 # -------- Main Program Loop -----------
 while not done:
     #
@@ -139,7 +140,7 @@ while not done:
 
         ########################################################################
         # NOW WE START THE ME405 SECTION
-        # Format of the packet is [X, Y, Z, CLAW]
+        # Format of the packet is [X, Y, Z, CLAW PITCH, CLAW CLOSE]
         # NOTE All joystick values are rounded to ONE decimal point due to joystick drift
         # R2 (Axis 5) is the claw
         claw_close = round((joystick.get_axis(5) + 1) * 90, 0)  # take the joystick input, make it from 0 - 2 then
@@ -173,27 +174,29 @@ while not done:
         if Zaxis < -ZLIMIT:
             Zaxis = -ZLIMIT
         if Xaxis == 0:  # hardcode to never be at 0 to avoid division by zero
-            Xaxis = 0.0000000000001
+            Xaxis = 1
 
         textPrint.tprint(screen, "Coordinates: {},{},{}".format(Xaxis, Yaxis, Zaxis))
 
         if debug:
-            textPrint.tprint(screen, "!!!DEBUG MODE, NOT CONNECTED TO MICROCONTROLLER!!!")
+            to_print = "!!!DEBUG MODE, NOT CONNECTED TO MICROCONTROLLER!!!"
         elif ACK:  # The Microcontroller is ready for another packet
-            packet = [Xaxis, Yaxis, Zaxis, claw_pitch, claw_close]
-            uart.write(packet)  # send the packet over to the
-            ACK = False  # Wait for the microcontroller to be ready for another packet
-        else:  # check if the Microcontroller is ready for another packet
-            if uart.any():
-                message = uart.read()
-                if message == "ACK":
-                    textPrint.tprint(screen, f"Microcontroller is ready for another packer")
-                    ACK = True  # it is ready for another packet
-        if not debug:
-            if uart.any():
-                message = uart.read()
-                textPrint.tprint(screen, f"Microcontroller just said {message}")
+            packet_string = str(Xaxis) + "," + str(Yaxis) + "," + str(Zaxis) + "," + str(claw_pitch) + "," + str(claw_close)
+            packet = bytearray(packet_string, 'ascii')
 
+            uart_to_micro.write(packet)  # send the packet over to the
+            ACK = True  # Wait for the microcontroller to be ready for another packet
+        else:  # check if the Microcontroller is ready for another packet
+            message = uart_to_micro.readline()
+            if message == "ACK":
+                to_print = f"Microcontroller is ready for another packer"
+                ACK = True  # it is ready for another packet
+            else:
+                if to_print != b"0":
+                    to_print = message
+        textPrint.tprint(screen, to_print)
+        textPrint.tprint(screen, f"Packet = {Xaxis}, {Yaxis}, {Zaxis}, {claw_pitch}, {claw_close}")
+        textPrint.tprint(screen, f"PacketString = {packet_string}")
         # END OF ME405 SECTION
         #########################################################################
 

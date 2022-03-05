@@ -5,7 +5,7 @@
 
 # Importing libraries
 import math 
-import matplotlib.pyplot as plt  # WILL NEED TO REMOVE THIS FOR
+#import matplotlib.pyplot as plt  # WILL NEED TO REMOVE THIS FOR
 
 
 class ElArAngles:
@@ -28,7 +28,7 @@ class ElArAngles:
         self.origin = 0;
         
         # It creates a local variable for plt
-        self.plt = plt;
+        #self.plt = plt;
         
         # Creating the math variable
         self.math = math;
@@ -57,11 +57,11 @@ class ElArAngles:
                      the behavior of the student during a period of 50 days
         '''
         
-        self.plt.plot(data_x, data_y, label='Robot Arm')
-        self.plt.ylabel('Vertical Distance')                 
-        self.plt.xlabel('Horizontal Distance')
-        self.plt.title ('Robotic Arm')
-        self.plt.grid()
+        #self.plt.plot(data_x, data_y, label='Robot Arm')
+        #self.plt.ylabel('Vertical Distance')
+        #self.plt.xlabel('Horizontal Distance')
+        #self.plt.title ('Robotic Arm')
+        #self.plt.grid()
 
     def run(self):
         '''
@@ -88,12 +88,12 @@ class ElArAngles:
             # Equations to find the angle for the arm
             self.phi1 = self.math.sqrt( -self.leo**4 + 2*(self.leo**2)*(self.lBe**2) + 2*(self.leo**2)*(self.x**2) + 2*(self.leo**2)*(self.y**2) - self.lBe**4 + 2*(self.lBe**2)*(self.x**2) + 2*(self.lBe**2)*(self.y**2) -self.x**4 - 2*(self.x**2)*(self.y**2) - self.y**4);
             self.tetha1_rad = 2*self.math.atan((2*self.leo*self.y + self.phi1)/(self.leo**2 + 2*self.leo*self.x - self.lBe**2 + self.x**2 + self.y**2))
-            self.tetha1 = self.tetha1_rad*(180/self.math.pi);  
-            
-        # Creating an array with the values for the angles for the elbow and arm
+            self.tetha1 = self.tetha1_rad*(180/self.math.pi)
+
+            # Creating an array with the values for the angles for the elbow and arm
         # of the robotic arm
-        self.angles = [self.tetha1_rad,self.tetha2_rad];
-        
+        self.angles = [self.tetha1_rad,self.tetha2_rad]
+
         print(self.angles);                 # <--------------------------------- YIELD ANGLES IN HERE
     
 
@@ -133,9 +133,9 @@ class ElArAngles:
         
 # ===============================================================================================================
         
-        self.plot(self.datax,self.datay)            # Plotting mechanism
-        self.plt.plot(self.locx, self.locy, '*', label='Desired Location')    # Plotting desired location, end-effector location
-        self.plt.legend (loc='lower right')
+        #self.plot(self.datax,self.datay)            # Plotting mechanism
+        #self.plt.plot(self.locx, self.locy, '*', label='Desired Location')    # Plotting desired location, end-effector location
+        #self.plt.legend (loc='lower right')
         
         
 

@@ -31,7 +31,7 @@ class ClosedLoopController:
         # TODO Document these class members
         # Setting some parameters
         self.final_point = 0
-        self.kp = 0
+        self.kp = .5
         self.gain = 0  # the gain will be updated in a function
         self.encoder = encoder
         self.motor = motor
@@ -68,4 +68,5 @@ class ClosedLoopController:
                 self.motor.set_duty_cycle(0)  # stop the motor until we get another position
             else:  # keep going
                 self.motor.set_duty_cycle(actuation)
+            #print(f"final Point {self.final_point}, current point {self.encoder.current_pos}, accucation {actuation}")
             yield 0  # let the next task do its job

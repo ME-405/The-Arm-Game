@@ -14,14 +14,19 @@ Our goal is to create a robotic arm that a user can control using a game control
 The arm will contain a calibrate function that will zero the base by lining up a magnet with a hall effect sensor. Once the base is calibrated the arm will go to the minimum value and set the encoder value to be zero.
 
 
-## Controller Library - UNDER CONSTRUCTION
-Currently under development. 
-Implementing the open source library pydualsense under the MIT license. This library will be used to read the current state of the controller. The library will also be used to set custom trigger states to use the dualsense features.
+## Color Code
+### Power
+Red electrical Tape - 12V Motor \
+Yellow electrical Tape - 7V Servo \
+Green Electrical Tape  - 5V? MicroServo \
+Blue with Green - GND \
+Black with Yellow - 7V
 
-## Install Open Source Libraries
-To install the pydualsense use the following command, make sure the x64 folder is in the directory
-`pip install pydualsense`
-
+### Data
+White - Servo0 \
+Blue - Servo1 \
+Black - Servo2\
+Yellow - Servo3
 
 
 # Bill of materials
