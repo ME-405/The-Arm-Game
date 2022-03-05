@@ -53,7 +53,7 @@ class ElArAngles:
                      the behavior of the student during a period of 50 days
         '''
         
-        self.plt.plot(data_x, data_y)
+        self.plt.plot(data_x, data_y, label='Robot Arm')
         self.plt.ylabel('Vertical Distance')                 
         self.plt.xlabel('Horizontal Distance')
         self.plt.title ('Robotic Arm')
@@ -130,7 +130,8 @@ class ElArAngles:
 # ===============================================================================================================
         
         self.plot(self.datax,self.datay)            # Plotting mechanism
-        self.plt.plot(self.locx, self.locy, '*')    # Plotting desired location, end-effector location
+        self.plt.plot(self.locx, self.locy, '*', label='Desired Location')    # Plotting desired location, end-effector location
+        self.plt.legend (loc='lower right')
         
         
 
