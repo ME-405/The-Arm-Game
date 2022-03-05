@@ -4,7 +4,8 @@
 @author  Nick De Simone, Jacob-Bograd, Horacio Albarran
 @date    February 07, 2022
 """
-
+'''
+# I DONT THINK ANY OF THESE ARE NEEDED
 # Importing the required classes and libraries
 from Motor import MotorDriver
 from encoder import Encoder
@@ -14,46 +15,26 @@ import pyb
 import time
 import utime
 
+'''
+
 
 class ClosedLoopController:
-    def __init__(self, input_interval, encoder, MotorDriver):
+    def __init__(self, encoder, motor):
         '''!
         @brief   closedLoopController manages the data provided by the encoder as well as running calculations
         @details This files manages the data provided by the encoder, it also manages the
                      setting values for the proper functioning of the motor, and any other
                      required calculations for the motor to work properly
-        @param   input_interval provides with the desired interval to collect data
         @param   encoder set the parameter given for the chosen encoder
-        @param   MotorDriver provides with the chosen motor
+        @param   motor provides with the chosen motor
         '''
         # TODO Document these class members
         # Setting some parameters
-        self.done = 0
         self.final_point = 0
         self.kp = 0
-        self.current_time = 0
         self.gain = 0  # the gain will be updated in a function
         self.encoder = encoder
-        self.motor = MotorDriver
-        self.start_time = utime.ticks_ms()  # the staring time
-        self.interval = input_interval  # the interval of the milliseconds
-        self.nextTime = utime.ticks_add(self.start_time, self.interval)
-        self.motorNum = 0
-
-        # Setting the UART for serial communication
-        self.uart = UART(2)
-        self.uart.init(115200)
-
-        # Setting arrays to store data
-        self.time_list = []
-        self.encoder_list = []
-    # TODO CHECK IF THIS IS NEEDED
-    def update_setpoint(self):
-        '''!
-        @details It sets the desired position of the encoder in ticks
-                    as defined by the input of the user
-        '''
-        self.final_point = int(input("Please enter the setpoint"))
+        self.motor = motor
 
     def zero_encoder(self):
         '''!
@@ -61,67 +42,6 @@ class ClosedLoopController:
         '''
         self.encoder.zero()
 
-    def update_interval(self):
-        '''!
-        @details It defines the interval at which data from the encoder
-                    will be collected as defined by the input of the user
-        '''
-        self.interval = int(input("Please enter the interval"))
-
-    def update_list(self):
-        '''!
-        @details It updates the encoder position and the current time-stamp while
-                    also appending such values to the corresponding array
-        '''
-
-        # Updating encoder's position on ticks
-        self.encoder.update()
-        # self.Position = float(self.Data[2])
-        encoder_value = self.encoder.current_pos
-
-        # Updating the time-stamp
-        timestamp = utime.ticks_diff(utime.ticks_ms(), self.start_time)
-
-        # Appending values to the corresponding array
-        self.time_list.append(timestamp)
-        self.encoder_list.append(encoder_value)
-
-    # print("DEBUG: ", timestamp, encoder_value)
-    # TODO CHECK IF THIS IS NEEDED
-    def update_kp(self):
-        '''!
-        @details It ask for the user's input for the variable kp
-        '''
-
-        # print('\r\n')
-        # print('Allowed K_p values are from 0-1')
-        # print('and press "S" to provide with a new command while collecting data')
-        # print(' "P" to plot the data, and "S" to start collecting data from zero')
-        self.K_p = input('Provide with input for K_p:  ')
-    # TODO CHECK IF THIS IS NEEDED
-    def print_list(self):
-        '''!
-        @details It provides with the numerical values for the encoder positions as
-                    well as the corresponding time-stamp to such encoder position
-        '''
-        if self.motorNum == 1:
-            data = zip(self.time_list, self.encoder_list)
-            for numbers in data:
-                print(*numbers)
-            print("DONE")
-
-        # clear the different lists
-        self.time_list.clear()
-        self.encoder_list.clear()
-    # TODO CHECK IF THIS IS NEEDED
-    def input_kp(self):
-        '''!
-            @details This functions is used for the computer interface interaction
-        '''
-        while self.uart.any == 0:
-            utime.sleep_us(50)
-        self.kp = self.uart.read()
-    # TODO clean this function up
     def control_algorithm(self):
         '''!
         @details It manages the value for kp as well as setting different
@@ -129,53 +49,23 @@ class ClosedLoopController:
                     actuation value; which is dependent of the difference
                     encoder positions as well as the value of kp
         '''
-        # self.kp = .6  # for DEBUG testing
-        if self.motorNum == 1:
-            # K_p value for motor-1
-            self.kp = float(input())
-        else:
-            # K_p value for motor-2
-            self.kp = .8  # for DEBUG testing
-
-        self.final_point = 16384
-        # self.final_point = 70000
         self.encoder.set_position(0)  # zero out the encoder value
-        # print("values set")
-        self.start_time = utime.ticks_ms()
+        # NOTE This clc will run endlessly for the robotic arm mission
         while True:
-            if self.done == 0:
-                self.encoder.update()  # update the encoder value
-                error = self.final_point - self.encoder.current_pos  # get the error
-                # print("error = ", error)
-                if error == 0:
-                    # print("DEBUG: ERROR IS NOW 0")
-                    self.motor.disable()  # disable the motor
-                    self.done = 1
-
-                else:
-                    # self.current_time = utime.ticks_ms()
-                    # if utime.ticks_diff(self.current_time, self.nextTime) >= 0:
-                    voltage = 3.3  # Voltage used for the micro-controller
-                    actuation = (error * self.kp) / voltage  # get the actuation
-                    if actuation >= 80:
-                        self.motor.set_duty_cycle(80)
-                    elif 30 >= actuation > 5:
-                        self.motor.set_duty_cycle(30)
-                    elif -30 <= actuation < 5:
-                        self.motor.set_duty_cycle(-30)
-                    elif actuation <= -80:
-                        self.motor.set_duty_cycle(-80)
-                    elif -5 <= actuation <= 5:
-                        #        print("DEBUG: I HAVE FINISHED")
-                        self.motor.disable()
-                        self.done = 1
-                    else:
-                        self.motor.set_duty_cycle(actuation)
-                    self.update_list()  # update the list position\
-                # yield 0
-            elif self.done == 1:
-                self.print_list()
-                self.done = 2
-                # yield 0
-            # else:
-            yield 0
+            self.encoder.update()  # update the encoder value
+            error = self.final_point - self.encoder.current_pos  # get the error
+            voltage = 3.3  # Voltage used for the micro-controller
+            actuation = (error * self.kp) / voltage  # get the actuation
+            if actuation >= 90:  # dont let it go too fast
+                self.motor.set_duty_cycle(90)
+            elif 20 >= actuation > 5:  # dont let it stall
+                self.motor.set_duty_cycle(20)
+            elif -20 <= actuation < 5:  # dont let it stall
+                self.motor.set_duty_cycle(-20)
+            elif actuation <= 90:  # dont let it go too fast
+                self.motor.set_duty_cycle(-90)
+            elif -5 <= actuation <= 5:  # we are there
+                self.motor.set_duty_cycle(0)  # stop the motor until we get another position
+            else:  # keep going
+                self.motor.set_duty_cycle(actuation)
+            yield 0  # let the next task do its job

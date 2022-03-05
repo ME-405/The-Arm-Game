@@ -142,8 +142,12 @@ while not done:
         # Format of the packet is [X, Y, Z, CLAW]
         # NOTE All joystick values are rounded to ONE decimal point due to joystick drift
         # R2 (Axis 5) is the claw
-        claw = (joystick.get_axis(5) + 1) * 90  # take the joystick input, make it from 0 - 2 then convert to angle
-        textPrint.tprint(screen, "Claw Angle {}".format(claw))
+        claw_close = round((joystick.get_axis(5) + 1) * 90, 0)  # take the joystick input, make it from 0 - 2 then
+        # convert to angle
+        claw_pitch = round((joystick.get_axis(4) + 1) * 90, 0)  # same as above
+        textPrint.tprint(screen, "Claw Pitch {}".format(claw_pitch))
+        textPrint.tprint(screen, "Claw Angle {}".format(claw_close))
+
 
         # Left Stick X (Axis 0) is X axis
         Xaxis = round(joystick.get_axis(0) + Xaxis, 1)
@@ -169,6 +173,9 @@ while not done:
             Yaxis = YLIMIT
         if Zaxis < -ZLIMIT:
             Zaxis = -ZLIMIT
+        if Xaxis == 0:  # hardcode to never be at 0 to avoid division by zero
+            Xaxis = 0.0000000000001
+
 
         textPrint.tprint(screen, "Coordinates: {},{},{}".format(Xaxis, Yaxis, Zaxis))
 
@@ -177,7 +184,7 @@ while not done:
         if debug:
             textPrint.tprint(screen, "!!!DEBUG MODE, NOT CONNECTED TO MICROCONTROLLER!!!")
         elif ACK:  # The Microcontroller is ready for another packet
-            packet = [Xaxis, Yaxis, Zaxis, claw]
+            packet = [Xaxis, Yaxis, Zaxis, claw_pitch, claw_close]
             uart.write(packet)  # send the packet over to the
             ACK = False  # Wait for the microcontroller to be ready for another packet
         else:  # check if the Microcontroller is ready for another packet
