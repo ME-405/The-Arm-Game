@@ -7,28 +7,18 @@
 from servo import Servo
 from Motor import MotorDriver
 from encoder import Encoder
-from closedLoopControl import ClosedLoopController as closed_loop
+from closedLoopControl import ClosedLoopController as ClosedLoop
 from pyb import Servo
 from pyb import UART
+from Vector_Coordinate_Function import ElArAngles
 import pyb
 import gc
 import cotask
 import task_share
 import math
 
-# Instantiated object for the encoder as well as timer,
-encoderPin1 = pyb.Pin(pyb.Pin.board.PC6)
-encoderPin2 = pyb.Pin(pyb.Pin.board.PC7)
-EncTimer1 = 8
-EncoderDriver = Encoder(encoderPin1, encoderPin2, EncTimer1, 1, 2)
 
-# Instantiated the objects for the motor
-motorEnable1 = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.IN, pyb.Pin.PULL_UP)
-motor1Pin1 = pyb.Pin(pyb.Pin.board.PB4, pyb.Pin.OUT_PP)
-motor1Pin2 = pyb.Pin(pyb.Pin.board.PB5, pyb.Pin.OUT_PP)
-motorTimer = pyb.Timer(3, freq=20000)
-Motor = MotorDriver(motorEnable1, motor1Pin1, motor1Pin2, motorTimer, 1, 2)
-input_interval = 10
+INPUTINTERVAL = 10
 
 DEFAULTANGLE = 0  # the default angle
 
@@ -52,21 +42,23 @@ def main():
     read_task = cotask.Task(arm.read_uart, name='read', priority=1, period=per_val, profile=False, trace=False)
     calculate_task = cotask.Task(arm.calculate_parameters, name='calculate', priority=1, period=per_val, profile=False,
                                  trace=False)
-    upadate_task = cotask.Task(arm.update_parameters, name='update', priority=1, period=per_val, profile=False,
+    update_task = cotask.Task(arm.update_parameters, name='update', priority=1, period=per_val, profile=False,
                                trace=False)
     clc_task = cotask.Task(arm.clc_passthrough(), name='clc', priority=1, period=per_val, profile=False, trace=False)
-    # append all of the tasks to the task list
+    # append all the tasks to the task list
     cotask.task_list.append(read_task)
     cotask.task_list.append(calculate_task)
-    cotask.task_list.append(upadate_task)
+    cotask.task_list.append(update_task)
     cotask.task_list.append(clc_task)
 
-    # run the garbace collector
+    # run the garbage collector
     gc.collect()
 
-    # run the scheduler with round robin since everything is the same
+    # run the scheduler with round-robin since everything is the same
     while True:
-        cotask.task_list.rr_sched()  # this will never end, I thin this is fine
+        cotask.task_list.rr_sched()  # this will never end, I think this is fine
+
+    print("Look All Done")
 
 
 class RoboticArm:
@@ -85,20 +77,37 @@ class RoboticArm:
         @param self.new_values  This is a boolean to determine if we need to update the parameters
         @param self.mail        This is a boolean to determine if we have new mail from the computer
         '''
+
+        # Instantiated object for the encoder as well as timer,
+        encoderPin1 = pyb.Pin(pyb.Pin.board.PC6)
+        encoderPin2 = pyb.Pin(pyb.Pin.board.PC7)
+        EncTimer1 = 8
+        EncoderDriver = Encoder(encoderPin1, encoderPin2, EncTimer1, 1, 2)
+
+        # Instantiated the objects for the motor
+        motorEnable1 = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.IN, pyb.Pin.PULL_UP)
+        motor1Pin1 = pyb.Pin(pyb.Pin.board.PB4, pyb.Pin.OUT_PP)
+        motor1Pin2 = pyb.Pin(pyb.Pin.board.PB5, pyb.Pin.OUT_PP)
+        motorTimer = pyb.Timer(3, freq=20000)
+        Motor = MotorDriver(motorEnable1, motor1Pin1, motor1Pin2, motorTimer, 1, 2)
+
+
+        # now setup all of the class variables
         self.uart = UART(uart_channel, baudrate)  # create a new uart connection with the sepcified channel and buadrate
-        self.clc = closed_loop(input_interval, EncoderDriver, Motor)  # make a new closed loop contorller
+        self.clc = ClosedLoop(INPUTINTERVAL, EncoderDriver, Motor)  # make a new closed loop contorller
         self.command = None  # set the command to nothing
         # make the 4 servo objects, the pins are hardcoded
         # The setup for the pins might not be correct
-        self.servo0 = Servo(pyb.Pin(pyb.Pin.board.PA6), 3, 1)  # The lower arm servo
+        self.servo0 = Servo(pyb.Pin(pyb.Pin.board.PA5), 2, 1)  # The lower arm servo
         # TODO Add the next 3 servos THESE ARE NOT CURRENTLY CORRECT
         self.servo1 = Servo(pyb.Pin(pyb.Pin.board.PA6), 3, 1)  # The middle arm servo
-        self.servo2 = Servo(pyb.Pin(pyb.Pin.board.PA7), 3, 1)  # The upper arm servo
-        self.servo3 = Servo(pyb.Pin(pyb.Pin.board.PB6), 3, 1)  # The claw servo
+        self.servo2 = Servo(pyb.Pin(pyb.Pin.board.PA7), 3, 2)  # The upper arm servo
+        self.servo3 = Servo(pyb.Pin(pyb.Pin.board.PB6), 4, 1)  # The claw servo
         self.angles = [DEFAULTANGLE, DEFAULTANGLE, DEFAULTANGLE, DEFAULTANGLE]  # set all of the angles to default
         self.endpoint = DEFAULTANGLE  # Set the default endpoint
         self.new_values = False  # we do not have any new values to read
         self.mail = False  # we do not have any mail from the computer
+        self.VCF = ElArAngles()  # make the Vector Coordinate Function
         # TODO FIND THE CONVERSION FACTOR
         self.conversion_factor = 5  # The conversion factor from angle to encoder ticks
 
@@ -106,33 +115,42 @@ class RoboticArm:
     def read_uart(self):
         while True:
             if self.uart.any():  # check if there is something in the pipeline
-                self.command = self.uart.read().split(',')  # read the entire uart buss and split on ,
+                # TODO CHECK THAT UTF-8 IS THE CORRECT ENCODING
+                command_string = self.uart.read().decode('utf-8').split(',')  # read the entire uart buss and split on ,
+                self.command = [float(coordinate) for coordinate in command_string]  # convert the string list to float
                 print('ACK')  # tell the computer you received the packet and it can send another one. TODO CHECK IF
                 # NECESSARY
                 self.mail = True  # we have some mail to sort through
             else:
                 self.mail = False  # we have no new mail
+            yield 0  # let another task have its turn in the spotlight
 
     # TODO ADD DOXY
     def calculate_parameters(self):
         # The format is X,Y,Z,CLAW
         while True:
             # TODO take the points and make them parameters
-            if self.mail:
+            if self.mail:  # only calculate parameters if there is something that we need to do
                 #  TODO do math to find the angles
-                #  Get the base angles
+                #  Get the base angle
+                #  Ange = arctan(y/x)
+                #  TODO CHECK ARCTAN CAN GET ALL ANGLES
                 radians = math.atan2(self.command[1], self.command[0])  # get the angle in radians
+
+                self.VCF.set_angles(self.command[1], self.command[2])  # update the VCF with the new angles
+                self.VCF.run()  # Have the VCF calculate the new angles
+                # TODO FIX THE CONVERSION FACTOR
                 self.endpoint = radians * self.conversion_factor  # convert the angle to encoder ticks
-                # TODO add the math for the angles
-                self.angles[0] = 5
-                self.angles[1] = 5
+                # Get the angles for the 4 servos
+                self.angles[0] = self.VCF.angles[0]
+                self.angles[1] = self.VCF.angles[1]
+                # The claw close and pitch are given as angles
                 self.angles[2] = self.command[3]  # get the claw pitch value
                 self.angles[3] = self.command[4]  # get the claw close value
             yield 0  # send it back for another task to take over
 
-    def update_parameters(self):
-        # TODO UPDATE THE PARAMETERS ONCE WE FIND THEM OUT.
 
+    def update_parameters(self):
         while True:
             if self.new_values:
                 # update the servo angles
@@ -142,7 +160,6 @@ class RoboticArm:
                 self.servo3.SetAngleRadian(self.angles[3])
                 # update the base endpoint
                 self.clc.final_point = self.endpoint
-
             else:
                 manual_breathing = 1  # you are now manually breathing
             yield 0  # let another function have it sturn

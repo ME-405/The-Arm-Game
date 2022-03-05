@@ -148,7 +148,6 @@ while not done:
         textPrint.tprint(screen, "Claw Pitch {}".format(claw_pitch))
         textPrint.tprint(screen, "Claw Angle {}".format(claw_close))
 
-
         # Left Stick X (Axis 0) is X axis
         Xaxis = round(joystick.get_axis(0) + Xaxis, 1)
 
@@ -176,10 +175,7 @@ while not done:
         if Xaxis == 0:  # hardcode to never be at 0 to avoid division by zero
             Xaxis = 0.0000000000001
 
-
         textPrint.tprint(screen, "Coordinates: {},{},{}".format(Xaxis, Yaxis, Zaxis))
-
-        # TODO add UART connections
 
         if debug:
             textPrint.tprint(screen, "!!!DEBUG MODE, NOT CONNECTED TO MICROCONTROLLER!!!")
@@ -188,8 +184,15 @@ while not done:
             uart.write(packet)  # send the packet over to the
             ACK = False  # Wait for the microcontroller to be ready for another packet
         else:  # check if the Microcontroller is ready for another packet
-            if uart.read() == "ACK":
-                ACK = True  # it is ready for another packet
+            if uart.any():
+                message = uart.read()
+                if message == "ACK":
+                    textPrint.tprint(screen, f"Microcontroller is ready for another packer")
+                    ACK = True  # it is ready for another packet
+        if not debug:
+            if uart.any():
+                message = uart.read()
+                textPrint.tprint(screen, f"Microcontroller just said {message}")
 
         # END OF ME405 SECTION
         #########################################################################
