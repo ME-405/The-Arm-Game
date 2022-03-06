@@ -181,8 +181,9 @@ while not done:
         if debug:
             to_print = "!!!DEBUG MODE, NOT CONNECTED TO MICROCONTROLLER!!!"
         elif ACK:  # The Microcontroller is ready for another packet
-            packet_string = str(Xaxis) + "," + str(Yaxis) + "," + str(Zaxis) + "," + str(claw_pitch) + "," + str(claw_close)
-            packet = bytearray(packet_string, 'ascii')
+            #packet_string = str(Xaxis) + "," + str(Yaxis) + "," + str(Zaxis) + "," + str(claw_pitch) + "," + str(claw_close)
+            packet_string = str(90) + "," + str(90) + "," + str(90) + "," + str(135) + "," + str(45)
+            packet = bytearray(packet_string)
 
             uart_to_micro.write(packet)  # send the packet over to the
             ACK = False  # Wait for the microcontroller to be ready for another packet
@@ -191,7 +192,7 @@ while not done:
             if message == "ACK":
                 to_print = "Microcontroller is ready for another packet"
                 ACK = True  # it is ready for another packet
-            else:
+            elif len(message) > 3:
                 to_print = message
         textPrint.tprint(screen, to_print)
         textPrint.tprint(screen, f"Packet = {Xaxis}, {Yaxis}, {Zaxis}, {claw_pitch}, {claw_close}")
