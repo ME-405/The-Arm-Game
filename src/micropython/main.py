@@ -60,11 +60,11 @@ def main():
     print("hello Computer")
     while True:
         next(read)
-        print("calculating")
+        #print("calculating")
         next(calculate)
-        print("Updating")
+        #print("Updating")
         next(update)
-        print("clc")
+        #print("clc")
         next(clc)
         # cotask.task_list.pri_sched()  # this will never end, I think this is fine
 
@@ -142,7 +142,7 @@ class RoboticArm:
                     self.command = [float(coordinate) for coordinate in
                                     command_string]  # convert the string list to float
                     print(
-                        "ACK")  # tell the computer you received the packet and it can send another one. TODO CHECK IF
+                        f"Thank You {command_string}")  # tell the computer you received the packet and it can send another one. TODO CHECK IF
                     # NECESSARY
                     self.mail = True  # we have some mail to sort through
             else:
