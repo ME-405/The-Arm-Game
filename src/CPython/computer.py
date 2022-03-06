@@ -12,12 +12,12 @@ debug = False
 ACK = True
 # setup the UART
 try:
-    uart_to_micro = serial.Serial(port='COM5', baudrate=115200, timeout=0.25)
+    uart_to_micro = serial.Serial(port='COM3', baudrate=115200, timeout=0.25)
     # reset the Microcontroller
     uart_to_micro.write(b'\x03')  # send Ctr+C
     time.sleep(0.5)  # sleep for half a second
     uart_to_micro.write(b'\x04')  # send Ctrl+D
-    time.sleep(0.5)
+    time.sleep(5)
     debug = False
 except serial.serialutil.SerialException:
     print("INVALID UART, ENTERING DEBUGGING MODE")
@@ -143,7 +143,7 @@ while not done:
         # Format of the packet is [X, Y, Z, CLAW PITCH, CLAW CLOSE]
         # NOTE All joystick values are rounded to ONE decimal point due to joystick drift
         # R2 (Axis 5) is the claw
-        claw_close = round((joystick.get_axis(5) + 1) * 90, 0)  # take the joystick input, make it from 0 - 2 then
+        claw_close = round((joystick.get_axis(3) + 1) * 90, 0)  # take the joystick input, make it from 0 - 2 then
         # convert to angle
         claw_pitch = round((joystick.get_axis(4) + 1) * 90, 0)  # same as above
         textPrint.tprint(screen, "Claw Pitch {}".format(claw_pitch))
@@ -185,11 +185,11 @@ while not done:
             packet = bytearray(packet_string, 'ascii')
 
             uart_to_micro.write(packet)  # send the packet over to the
-            ACK = True  # Wait for the microcontroller to be ready for another packet
+            ACK = False  # Wait for the microcontroller to be ready for another packet
         else:  # check if the Microcontroller is ready for another packet
             message = uart_to_micro.readline()
             if message == "ACK":
-                to_print = f"Microcontroller is ready for another packet"
+                to_print = "Microcontroller is ready for another packet"
                 ACK = True  # it is ready for another packet
             else:
                 to_print = message
