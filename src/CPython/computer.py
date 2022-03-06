@@ -12,7 +12,7 @@ debug = False
 ACK = True
 # setup the UART
 try:
-    uart_to_micro = serial.Serial(port='com5', baudrate=115273, timeout=0.25)
+    uart_to_micro = serial.Serial(port='COM5', baudrate=115200, timeout=0.25)
     # reset the Microcontroller
     uart_to_micro.write(b'\x03')  # send Ctr+C
     time.sleep(0.5)  # sleep for half a second
@@ -189,14 +189,16 @@ while not done:
         else:  # check if the Microcontroller is ready for another packet
             message = uart_to_micro.readline()
             if message == "ACK":
-                to_print = f"Microcontroller is ready for another packer"
+                to_print = f"Microcontroller is ready for another packet"
                 ACK = True  # it is ready for another packet
             else:
-                if to_print != b"0":
-                    to_print = message
+                to_print = message
         textPrint.tprint(screen, to_print)
         textPrint.tprint(screen, f"Packet = {Xaxis}, {Yaxis}, {Zaxis}, {claw_pitch}, {claw_close}")
-        textPrint.tprint(screen, f"PacketString = {packet_string}")
+        try:
+            textPrint.tprint(screen, f"PacketString = {packet_string}")
+        except NameError:
+            pass  # we are in debug mode
         # END OF ME405 SECTION
         #########################################################################
 

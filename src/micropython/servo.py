@@ -16,6 +16,6 @@ class Servo:
         self.SetAngle(degree)
 
     def SetAngle(self, degree):
-        pulse = degree * (2/3)  		     # update the conversion factor
-        self.channel.pulse_width(pulse) 	 # set the pulse width
-        pass
+        pulse = int(degree / 18) + 2  		     # update the conversion factor
+        self.channel.pulse_width_percent(pulse) 	 # set the pulse width
+        print(pulse)
