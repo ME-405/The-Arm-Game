@@ -12,12 +12,14 @@ debug = False
 ACK = True
 # setup the UART
 try:
-    uart_to_micro = serial.Serial(port='COM3', baudrate=115200, timeout=0.25)
+    uart_to_micro = serial.Serial(port='COM5', baudrate=115200, timeout=0.25)
     # reset the Microcontroller
     uart_to_micro.write(b'\x03')  # send Ctr+C
     time.sleep(0.5)  # sleep for half a second
     uart_to_micro.write(b'\x04')  # send Ctrl+D
-    time.sleep(5)
+    uart_to_micro.reset_input_buffer()
+    uart_to_micro.reset_output_buffer()
+    #time.sleep(5)
     debug = False
 except serial.serialutil.SerialException:
     print("INVALID UART, ENTERING DEBUGGING MODE")
@@ -181,19 +183,31 @@ while not done:
         if debug:
             to_print = "!!!DEBUG MODE, NOT CONNECTED TO MICROCONTROLLER!!!"
         elif ACK:  # The Microcontroller is ready for another packet
-            #packet_string = str(Xaxis) + "," + str(Yaxis) + "," + str(Zaxis) + "," + str(claw_pitch) + "," + str(claw_close)
-            packet_string = str(90) + "," + str(90) + "," + str(90) + "," + str(135) + "," + str(45)
-            packet = bytearray(packet_string)
-
-            uart_to_micro.write(packet)  # send the packet over to the
+            # packet_string = str(Xaxis) + "," + str(Yaxis) + "," + str(Zaxis) + "," + str(claw_pitch) + ",
+            # " + str(claw_close)
+            packet_string = str(1) + "," + str(2) + "," + str(3) + "," + str(135) + "," + str(45)
+            to_print = "Packet_string = " + packet_string
+            uart_to_micro.write(packet_string.encode('utf-8'))  # send the packet over to the
             ACK = False  # Wait for the microcontroller to be ready for another packet
         else:  # check if the Microcontroller is ready for another packet
-            message = uart_to_micro.readline()
-            if message == "ACK":
-                to_print = "Microcontroller is ready for another packet"
-                ACK = True  # it is ready for another packet
-            elif len(message) > 3:
-                to_print = message
+            temp_to_print = ""
+            messages = uart_to_micro.readlines()
+            for message in messages:
+                if "ACK" in message.decode():
+                    to_print = "Microcontroller is ready for another packet"
+                    ACK = True
+            if not ACK:
+                temp_to_print = ""
+                for message in messages:
+                    temp_to_print += message.decode()
+            if temp_to_print != "":
+                to_print = temp_to_print
+        #  if "ACK":
+        #      to_print = "Microcontroller is ready for another packet"
+        #      ACK = True  # it is ready for another packet
+        # elif len(message) > 3:
+        #    to_print = message
+        print(to_print)
         textPrint.tprint(screen, to_print)
         textPrint.tprint(screen, f"Packet = {Xaxis}, {Yaxis}, {Zaxis}, {claw_pitch}, {claw_close}")
         try:
