@@ -30,9 +30,9 @@ class TextPrint(object):
             notRead = True
             messages = 0
             while notRead:
-                read = self.uart.readline()
-                if read != b'':
-                    print(read.decode('ascii'))
+                if self.uart.inWaiting() != 0:
+                    read = self.uart.readlines()
+                    print(read)
                     notRead = False
 
 
