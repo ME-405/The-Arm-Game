@@ -5,21 +5,21 @@ import time
 # TODO MAKE THIS OUR OWN CODE THIS IS EXAMPLE CODE
 
 # constants
-XLIMIT = 10
-YLIMIT = 10
-ZLIMIT = 10
+XLIMIT = 4.65 * 2
+YLIMIT = 4.65 * 2
+ZLIMIT = 4.65 * 2
 debug = False
 ACK = True
 # setup the UART
 try:
-    uart_to_micro = serial.Serial(port='COM5', baudrate=115200, timeout=0.25)
+    uart_to_micro = serial.Serial(port='COM5', baudrate=115200, timeout=0)
     # reset the Microcontroller
     uart_to_micro.write(b'\x03')  # send Ctr+C
     time.sleep(0.5)  # sleep for half a second
     uart_to_micro.write(b'\x04')  # send Ctrl+D
     uart_to_micro.reset_input_buffer()
     uart_to_micro.reset_output_buffer()
-    #time.sleep(5)
+    time.sleep(5)
     debug = False
 except serial.serialutil.SerialException:
     print("INVALID UART, ENTERING DEBUGGING MODE")
@@ -78,9 +78,10 @@ textPrint = TextPrint()
 
 # intinalize the starting variables
 Xaxis = 0
-Yaxis = 0
-Zaxis = 0  # start off as zero
+Yaxis = 4.6
+Zaxis = 4.6  # start off as zero
 to_print = "Nothing Yet"
+previous_to_print = None
 # -------- Main Program Loop -----------
 while not done:
     #
@@ -145,49 +146,78 @@ while not done:
         # Format of the packet is [X, Y, Z, CLAW PITCH, CLAW CLOSE]
         # NOTE All joystick values are rounded to ONE decimal point due to joystick drift
         # R2 (Axis 5) is the claw
-        claw_close = round((joystick.get_axis(3) + 1) * 90, 0)  # take the joystick input, make it from 0 - 2 then
+        claw_close = round((joystick.get_axis(5) + 1) * 90, 0)  # take the joystick input, make it from 0 - 2 then
+        if claw_close > 45:
+            claw_close = 45
+        elif claw_close < 0:
+            claw_close = 0
+
         # convert to angle
         claw_pitch = round((joystick.get_axis(4) + 1) * 90, 0)  # same as above
+        if claw_pitch < 0:
+            claw_pitch = 0
+        elif claw_pitch > 90:
+            claw_pitch = 90
         textPrint.tprint(screen, "Claw Pitch {}".format(claw_pitch))
         textPrint.tprint(screen, "Claw Angle {}".format(claw_close))
+        buttons = joystick.get_numbuttons()
+        textPrint.tprint(screen, "Number of buttons: {}".format(buttons))
+        textPrint.indent()
 
+        for i in range(buttons):
+            button = joystick.get_button(i)
+            textPrint.tprint(screen,
+                             "Button {:>2} value: {}".format(i, button))
+        textPrint.unindent()
         # Left Stick X (Axis 0) is X axis
-        Xaxis = round(joystick.get_axis(0) + Xaxis, 1)
+        Xaxis = (joystick.get_button(14) * 0.1 + Xaxis)
+        Xaxis = Xaxis - (joystick.get_button(13) * 0.1)
+
+        #Xaxis = round(joystick.get_axis(0) + Xaxis, 1)
 
         # Left Stick Y (Axis 0) is Y axis
-        Yaxis = round((-1 * joystick.get_axis(1)) + Yaxis, 1)  # Negative 1 because joystick is backwards
-
+        Yaxis = (joystick.get_button(11) * 0.1) + Yaxis
+        Yaxis = Yaxis - (joystick.get_button(12) * 0.1)
+        #Yaxis = round((-1 * joystick.get_axis(1)) + Yaxis, 1)  # Negative 1 because joystick is backwards
+        Xaxis = round(Xaxis, 3)
+        Yaxis = round(Yaxis, 3)
         # L2 (Axis 4) is Z axis
         # 0 is ground 2 is max vertical
-        Zaxis = round((-1 * joystick.get_axis(3)) + Zaxis, 1)  # Negative 1 because joystick is backwards
+        Zaxis = round(((-1 * joystick.get_axis(3)) * 0.1) + Zaxis, 1)  # Negative 1 because joystick is backwards
 
         # check that the axis are not at their limit
-
+        '''
         if Xaxis > XLIMIT:
             Xaxis = XLIMIT
         if Yaxis > YLIMIT:
             Yaxis = YLIMIT
         if Zaxis > ZLIMIT:
             Zaxis = ZLIMIT
-        if Xaxis < -XLIMIT:
-            Xaxis = -XLIMIT
-        if Yaxis < -YLIMIT:
-            Yaxis = YLIMIT
-        if Zaxis < -ZLIMIT:
-            Zaxis = -ZLIMIT
+        if Xaxis < -2.1:
+            Xaxis = -2.1
+        if Yaxis < -8:
+            Yaxis = -8
+            '''
+        if Zaxis == 0:
+            Zaxis = 0.000001
         if Xaxis == 0:  # hardcode to never be at 0 to avoid division by zero
-            Xaxis = 1
+            Xaxis = 0.000001
+        if Yaxis == 0:
+            Yaxis = 0.000001
+        if Zaxis == 0:
+            Zaxis = 0.000001
 
         textPrint.tprint(screen, "Coordinates: {},{},{}".format(Xaxis, Yaxis, Zaxis))
 
         if debug:
             to_print = "!!!DEBUG MODE, NOT CONNECTED TO MICROCONTROLLER!!!"
         elif ACK:  # The Microcontroller is ready for another packet
-            # packet_string = str(Xaxis) + "," + str(Yaxis) + "," + str(Zaxis) + "," + str(claw_pitch) + ",
-            # " + str(claw_close)
-            packet_string = str(1) + "," + str(2) + "," + str(3) + "," + str(135) + "," + str(45)
+            packet_string = str(Xaxis) + "," + str(Yaxis) + "," + str(Zaxis) + "," + str(claw_pitch) + "," + str(
+                claw_close) + '\r\n'
+            # packet_string = str(4.6) + "," + str(4.6) + "," + str(4.6) + "," + str(135) + "," + str(45) + '\r\n'
             to_print = "Packet_string = " + packet_string
             uart_to_micro.write(packet_string.encode('utf-8'))  # send the packet over to the
+            # print(f"PACKET SENT {packet_string.encode('utf-8')}")
             ACK = False  # Wait for the microcontroller to be ready for another packet
         else:  # check if the Microcontroller is ready for another packet
             temp_to_print = ""
@@ -207,13 +237,17 @@ while not done:
         #      ACK = True  # it is ready for another packet
         # elif len(message) > 3:
         #    to_print = message
-        print(to_print)
+        # if previous_to_print != to_print:
+        # print(to_print)
+        previous_to_print = to_print
         textPrint.tprint(screen, to_print)
         textPrint.tprint(screen, f"Packet = {Xaxis}, {Yaxis}, {Zaxis}, {claw_pitch}, {claw_close}")
         try:
             textPrint.tprint(screen, f"PacketString = {packet_string}")
         except NameError:
             pass  # we are in debug mode
+
+        textPrint.tprint(screen, f"MCU Ready = {ACK}")
         # END OF ME405 SECTION
         #########################################################################
 

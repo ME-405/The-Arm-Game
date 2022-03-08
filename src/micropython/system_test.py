@@ -1,9 +1,9 @@
 # This is a servo test file
 
 import pyb
-from Motor import MotorDriver
-from encoder import Encoder
-from closedLoopControl import ClosedLoopController as clc
+#from Motor import MotorDriver
+#from encoder import Encoder
+#from closedLoopControl import ClosedLoopController as clc
 
 
 def main():
@@ -48,8 +48,10 @@ def main():
         pwm = float(input("New PWM1"))
         #pwm = 1.5
         ch.pulse_width_percent(pwm)
-        pwm2 = float(input("New PWM2"))
-        ch2.pulse_width_percent(pwm2)
+        #pwm2 = float(input("New PWM2"))
+        ch2.pulse_width_percent(pwm)
+        ch3.pulse_width_percent(pwm)
+        ch4.pulse_width_percent(pwm)
         #ch3.pulse_width_percent(pwm)
         #ch4.pulse_width_percent(pwm)
 

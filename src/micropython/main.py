@@ -62,11 +62,13 @@ def main():
     print("hello Computer")
     while True:
         next(read)
-        #print("calculating")
+        # print("calculating")
         next(calculate)
-        #print("Updating")
+        # print("Updating")
         next(update)
-        #print("clc")
+        # print("clc")
+        #print(f"MCU DEBUG: error: {arm.clc.send_error}, actuation: {arm.clc.send_actuation}, current pos {arm.clc.encoder.current_pos}, final pos {arm.clc.final_point}")
+       # for i in range(1, 10):
         next(clc)
         # cotask.task_list.pri_sched()  # this will never end, I think this is fine
 
@@ -103,18 +105,21 @@ class RoboticArm:
         motorTimer = pyb.Timer(5, freq=20000)
         Motor = MotorDriver(motorEnable1, motor1Pin1, motor1Pin2, motorTimer, 1, 2)
 
-        # Conditions for UART
-        self.uart_channel = uart_channel
-        self.baudrate = baudrate
+        # Conditions for UART  # TODO REMVOE THIS SECTION
+       # self.uart_channel = uart_channel
+       # self.baudrate = baudrate
 
         # Conditionals for the USB coms
         self.serial_stream = USB_VCP()
         self.nb_in = NB_Input(self.serial_stream, echo=False)
 
         # now setup all of the class variables
-        self.uart = UART(self.uart_channel,
-                         self.baudrate)  # create a new UART connection with the specified channel and buadrate
-        self.uart.init(115200)
+
+        # TODO remvoe THE UART
+       # self.uart = UART(self.uart_channel,
+          #              self.baudrate)  # create a new UART connection with the specified channel and buadrate
+       # self.uart.init(115200)
+
         self.clc = ClosedLoop(EncoderDriver, Motor)  # make a new closed loop controller
         # self.command = [1, 0.1, 0.1, 100, 60]  #DEBUG
         self.command = None  # set the command to nothing
@@ -122,7 +127,6 @@ class RoboticArm:
         # make the 4 servo objects, the pins are hard-coded
         # The setup for the pins might not be correct
         self.servo0 = Servo(pyb.Pin(pyb.Pin.board.PA5), 2, 1)  # The lower arm servo
-        # TODO Add the next 3 servos THESE ARE NOT CURRENTLY CORRECT
         self.servo1 = Servo(pyb.Pin(pyb.Pin.board.PA6), 3, 1)  # The middle arm servo
         self.servo2 = Servo(pyb.Pin(pyb.Pin.board.PA7), 3, 2)  # The upper arm servo
         self.servo3 = Servo(pyb.Pin(pyb.Pin.board.PC7), 8, 2)  # The claw servo
@@ -138,19 +142,22 @@ class RoboticArm:
     # TODO ADD DOXY
     def read_uart(self):
         while True:
-            if self.nb_in.any() != 0:
-            # if self.uart.any():  # check if there is something in the pipeline
-                command_string = self.nb_in.get().split(',')
-                #command_string = self.uart.read().decode('ascii').strip().split(
+            if self.nb_in.any():
+            #if True:
+                # if self.uart.any():  # check if there is something in the pipeline
+                # TODO MAKE IT BE ABLE TO HANDLE BAD COMMANDS
+                command_string = self.nb_in.get().split(',')  # read in the command and split on ,
+                # command_string = self.uart.read().decode('ascii').strip().split(
                 #    ',')  # read the entire UART buss and split on ,
                 # print(command_string)
-                print(command_string)
+                # print(command_string)
                 self.command = [float(coordinate) for coordinate in command_string]  # convert the string list to float
-                print(f"Thank You {command_string}")  # tell the computer you received the packet and it can send another one. TODO CHECK IF
+                #print(f"Thank You")  # tell the computer you received the packet and it can send another one. TODO CHECK IF
                 # NECESSARY
                 print("ACK")  # we acknowledge
                 self.mail = True  # we have some mail to sort through
             else:
+               # print("No Mail")
                 self.mail = False  # we have no new mail
             yield 0  # let another task have its turn in the spotlight
 
@@ -163,17 +170,20 @@ class RoboticArm:
                 #  Ange = arctan(y/x)
                 #  TODO CHECK ARCTAN CAN GET ALL ANGLES
                 radians = math.atan2(self.command[1], self.command[0])  # get the angle in radians
+                # TODO CHECK THAT THIS FORMULA IS CORRECT
                 self.endpoint = radians * self.conversion_factor * 180 / math.pi  # convert the angle to encoder ticks
-
+                #radius = math.sqrt(self.command[0]**2 + self.command[1]**2)
                 self.VCF.set_angles(self.command[1], self.command[2])  # update the VCF with the new angles
                 self.VCF.run()  # Have the VCF calculate the new angles
-                # TODO FIX THE CONVERSION FACTOR
+
                 # Get the angles for the 4 servos
                 self.angles[0] = self.VCF.tetha1
-                self.angles[1] = self.VCF.tetha2 + 90
-                print(self.angles[1])
+                self.angles[1] = 180 - (self.VCF.tetha2 + 90)  # The servo is backwards
+                # print(self.angles[1])  # DEBUG
                 # The claw close and pitch are given as angles
-                self.angles[2] = self.command[3]  # get the claw pitch value
+
+                # TODO CHECK IF THESE SERVOS ARE INVERTED
+                self.angles[2] = 180 - self.command[3]  # get the claw pitch value
                 self.angles[3] = self.command[4]  # get the claw close value
                 self.new_values = True
             yield 0  # send it back for another task to take over
@@ -187,6 +197,7 @@ class RoboticArm:
                 self.servo2.SetAngle(self.angles[2])
                 self.servo3.SetAngle(self.angles[3])
                 # update the base endpoint
+                #print("New Endpoint = " + str(self.endpoint))
                 self.clc.final_point = self.endpoint
                 # print(f"angle0 {self.angles[0]} angle1 {self.angles[1]} angle2 {self.angles[2]} angle3 {self.angles[3]}")
             else:
