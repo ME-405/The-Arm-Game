@@ -55,3 +55,7 @@ The following model was constructed to be able to catch the ping pong ball in a 
 ![Model](Images/Table_Design.png)
 
 
+# Video Of Robotic Arm Trial
+https://user-images.githubusercontent.com/97562028/157775190-7329a550-d666-48c8-a3db-366ec8aceaca.mp4
+
+
