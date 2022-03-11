@@ -77,9 +77,11 @@ torque since it was visually seen that the provided servos were having some issu
 
 ## Hardware Components
 Please refer to the following link for the hardware parts:
+https://github.com/ME-405/The-Arm-Game/tree/main/Hardware_Components
 
 ## Video of Functioning Mechanism
-The following video provides with the final functioning of the mechanism
-https://user-images.githubusercontent.com/97562028/157775190-7329a550-d666-48c8-a3db-366ec8aceaca.mp4
+The following video provides with the final functioning of the mechanism: 
+https://user-images.githubusercontent.com/97562028/157779387-043f62d6-f68d-46a5-b4d3-32e55e5b0366.mp4
+
 
 
