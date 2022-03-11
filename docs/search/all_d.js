@@ -1,11 +1,10 @@
 var searchData=
 [
-  ['schedule_47',['schedule',['../classcotask_1_1_task.html#af60def0ed4a1bc5fec32f3cf8b8a90c8',1,'cotask::Task']]],
-  ['ser_5fnum_48',['ser_num',['../classtask__share_1_1_queue.html#a6f9d87b116eb16dba0867d3746af9f5f',1,'task_share.Queue.ser_num()'],['../classtask__share_1_1_share.html#a2e8df029af46fbfd44ef0c2e7e8c7af6',1,'task_share.Share.ser_num()']]],
-  ['servo_49',['Servo',['../classservo_1_1_servo.html',1,'servo']]],
-  ['set_5fduty_5fcycle_50',['set_duty_cycle',['../class_motor_1_1_motor_driver.html#a7ecf346f9ba00ddaa4d18f794ef7d15b',1,'Motor::MotorDriver']]],
-  ['set_5fposition_51',['set_position',['../classencoder_1_1_encoder.html#a097746ac59abf28e6567f5604fe83c1f',1,'encoder::Encoder']]],
-  ['share_52',['Share',['../classtask__share_1_1_share.html',1,'task_share']]],
-  ['share_5flist_53',['share_list',['../task__share_8py.html#a75818e5b662453e3723d0f234c85e519',1,'task_share']]],
-  ['show_5fall_54',['show_all',['../task__share_8py.html#a130cad0bc96d3138e77344ea85586b7c',1,'task_share']]]
+  ['read_47',['read',['../classencoder_1_1_encoder.html#aa1c1535160682500f5214f45d8197027',1,'encoder::Encoder']]],
+  ['read_5fuart_48',['read_uart',['../classmain_1_1_robotic_arm.html#adcf474a1d4e62d42f2a71a6a5a9a6a2f',1,'main::RoboticArm']]],
+  ['ready_49',['ready',['../classcotask_1_1_task.html#a6102bc35d7cb1ce292abc85d4ddc23e1',1,'cotask::Task']]],
+  ['reset_5fprofile_50',['reset_profile',['../classcotask_1_1_task.html#a1bcbfa7dd7086112af20b7247ffa4a2e',1,'cotask::Task']]],
+  ['roboticarm_51',['RoboticArm',['../classmain_1_1_robotic_arm.html',1,'main']]],
+  ['rr_5fsched_52',['rr_sched',['../classcotask_1_1_task_list.html#a01614098aedc87b465d5525c6ccb47ce',1,'cotask::TaskList']]],
+  ['run_53',['run',['../class_vector___coordinate___function_1_1_el_ar_angles.html#a06572b30e8e3fe6fee4dab760d79e036',1,'Vector_Coordinate_Function::ElArAngles']]]
 ];

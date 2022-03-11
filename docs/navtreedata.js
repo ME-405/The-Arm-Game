@@ -35,11 +35,7 @@ var NAVTREE =
       [ "The Arm Game Source Code Access", "page__analysis.html#page_Analysis_src", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
-      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
-      [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
-        [ "Variables", "namespacemembers_vars.html", null ]
-      ] ]
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -59,7 +55,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_motor_8py.html"
+""
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

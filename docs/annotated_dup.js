@@ -28,5 +28,7 @@ var annotated_dup =
       [ "Queue", "classtask__share_1_1_queue.html", "classtask__share_1_1_queue" ],
       [ "Share", "classtask__share_1_1_share.html", "classtask__share_1_1_share" ]
     ] ],
-    [ "Vector_Coordinate_Function", "namespace_vector___coordinate___function.html", "namespace_vector___coordinate___function" ]
+    [ "Vector_Coordinate_Function", null, [
+      [ "ElArAngles", "class_vector___coordinate___function_1_1_el_ar_angles.html", "class_vector___coordinate___function_1_1_el_ar_angles" ]
+    ] ]
 ];

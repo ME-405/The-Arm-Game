@@ -95,19 +95,23 @@ $(document).ready(function(){initNavTree('classmain_1_1_robotic_arm.html',''); i
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3c157e685a9bc1e6167d4b72058eec11"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmain_1_1_robotic_arm.html#a3c157e685a9bc1e6167d4b72058eec11">__init__</a> (self, uart_channel=2, baudrate=115200)</td></tr>
-<tr class="memdesc:a3c157e685a9bc1e6167d4b72058eec11"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO.  <a href="classmain_1_1_robotic_arm.html#a3c157e685a9bc1e6167d4b72058eec11">More...</a><br /></td></tr>
+<tr class="memdesc:a3c157e685a9bc1e6167d4b72058eec11"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class corresponds to the main file in which all other task are intercommunicating.  <a href="classmain_1_1_robotic_arm.html#a3c157e685a9bc1e6167d4b72058eec11">More...</a><br /></td></tr>
 <tr class="separator:a3c157e685a9bc1e6167d4b72058eec11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcf474a1d4e62d42f2a71a6a5a9a6a2f"><td class="memItemLeft" align="right" valign="top"><a id="adcf474a1d4e62d42f2a71a6a5a9a6a2f"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>read_uart</b> (self)</td></tr>
+def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmain_1_1_robotic_arm.html#adcf474a1d4e62d42f2a71a6a5a9a6a2f">read_uart</a> (self)</td></tr>
+<tr class="memdesc:adcf474a1d4e62d42f2a71a6a5a9a6a2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">It reads the values that are on the repository. <br /></td></tr>
 <tr class="separator:adcf474a1d4e62d42f2a71a6a5a9a6a2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e82226c76ae667d45f433eeed59a672"><td class="memItemLeft" align="right" valign="top"><a id="a0e82226c76ae667d45f433eeed59a672"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>calculate_parameters</b> (self)</td></tr>
+def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmain_1_1_robotic_arm.html#a0e82226c76ae667d45f433eeed59a672">calculate_parameters</a> (self)</td></tr>
+<tr class="memdesc:a0e82226c76ae667d45f433eeed59a672"><td class="mdescLeft">&#160;</td><td class="mdescRight">It calculates the parameters in order to sent the signals to the motors and servos. <br /></td></tr>
 <tr class="separator:a0e82226c76ae667d45f433eeed59a672"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1f956144e282f39e2cd28bc2c00d531"><td class="memItemLeft" align="right" valign="top"><a id="ac1f956144e282f39e2cd28bc2c00d531"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>update_parameters</b> (self)</td></tr>
+def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmain_1_1_robotic_arm.html#ac1f956144e282f39e2cd28bc2c00d531">update_parameters</a> (self)</td></tr>
+<tr class="memdesc:ac1f956144e282f39e2cd28bc2c00d531"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the given parameters based on the new desired location(s) <br /></td></tr>
 <tr class="separator:ac1f956144e282f39e2cd28bc2c00d531"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0545a53c3059447a7bc8afc1f4dd77db"><td class="memItemLeft" align="right" valign="top"><a id="a0545a53c3059447a7bc8afc1f4dd77db"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>clc_passthrough</b> (self)</td></tr>
+def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmain_1_1_robotic_arm.html#a0545a53c3059447a7bc8afc1f4dd77db">clc_passthrough</a> (self)</td></tr>
+<tr class="memdesc:a0545a53c3059447a7bc8afc1f4dd77db"><td class="mdescLeft">&#160;</td><td class="mdescRight">It runs the control algorithm function on <a class="el" href="closed_loop_control_8py.html">closedLoopControl.py</a> in order to calculate the actuation of the motor. <br /></td></tr>
 <tr class="separator:a0545a53c3059447a7bc8afc1f4dd77db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8181d0685b21f94477396d8fc97b0485"><td class="memItemLeft" align="right" valign="top"><a id="a8181d0685b21f94477396d8fc97b0485"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmain_1_1_robotic_arm.html#a8181d0685b21f94477396d8fc97b0485">zero_encoder</a> (self)</td></tr>
@@ -192,12 +196,11 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>TODO. </p>
-<p>TODO </p><dl class="params"><dt>Parameters</dt><dd>
+<p>This class corresponds to the main file in which all other task are intercommunicating. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">uart_channel</td><td>This is the uart channel that we will be using for communication </td></tr>
-    <tr><td class="paramname">baudrate</td><td>This is the baudreate that we will be using for communication TODO update the doxygen from</td></tr>
-    <tr><td class="paramname"></td><td></td></tr>
+    <tr><td class="paramname">baudrate</td><td>This is the baudreate that we will be using for communication </td></tr>
   </table>
   </dd>
 </dl>
