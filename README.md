@@ -81,6 +81,7 @@ https://github.com/ME-405/The-Arm-Game/tree/main/Hardware_Components
 
 ## Video of Functioning Mechanism
 The following video provides with the final functioning of the mechanism: 
+
 https://user-images.githubusercontent.com/97562028/157779387-043f62d6-f68d-46a5-b4d3-32e55e5b0366.mp4
 
 
