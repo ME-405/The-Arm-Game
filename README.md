@@ -83,3 +83,7 @@ The following video provides with the final functioning of the mechanism
 https://user-images.githubusercontent.com/97562028/157775190-7329a550-d666-48c8-a3db-366ec8aceaca.mp4
 
 
+# Video Of Robotic Arm Trial
+https://user-images.githubusercontent.com/97562028/157775190-7329a550-d666-48c8-a3db-366ec8aceaca.mp4
+
+
