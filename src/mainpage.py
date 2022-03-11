@@ -5,9 +5,9 @@
 
 
 @section sec_intro Introduction
-Welcome to the lab repository for The-Arm-Game for ME 405. In this online repository website, it can be found 
-all of the necessary files in order to perform the lab project assigned during the Winter 2022 quarter for the 
-class of ME 405 at the California Polytechnic State University (Cal Poly) located at San Luis Obispo, Ca. 
+Welcome to the lab repository for The-Arm-Game for ME-405. In this online repository website, it can be found 
+all of the necessary files in order to perform the lab project assigned during Winter 2022 quarter for the 
+class of ME-405 at the California Polytechnic State University (Cal Poly) located at San Luis Obispo, Ca. 
 lectured by Professor John R. Ridgely.
 
 @section sec_Software_Design Software Design
