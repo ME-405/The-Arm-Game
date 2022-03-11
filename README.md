@@ -7,6 +7,7 @@ Jacob Bograd, Nick De Simone, Horacio Albarran
 There are ten .py files needed to be residing on the micro-controller side in order for it to function ideally. Such files allow for closed loop control of the used motor as well as providing with the required calculations in order to operate the arm, elbow, and clamping mechanism of the links.  
 On the other hand, there is one required file on the computer side in order to open the console for the game controller to be used and provide with the desired x,y, and z-coordinates of the desired point in space where the claw must be located in order to grab the desired object, in this case, a ping-pong ball.
 For further information, please refer to the following link for any documentation regarding "The Arm Game" project:
+
 https://me-405.github.io/The-Arm-Game/
 
 ## Introduction
@@ -48,7 +49,9 @@ Yellow - Servo3
 |  1   | Ping-Pong ball                       | Undefined             |     -     |
 
 # Part List
-Pittperson Gearmotors https://www.ebay.com/itm/144350295705?hash=item219bf2b699:g:6eIAAOSwj59hzPha
+Pittperson Gearmotors 
+
+https://www.ebay.com/itm/144350295705?hash=item219bf2b699:g:6eIAAOSwj59hzPha
 
 # System Sketch
 The following images display an overview of the hardware design which was 3D printed
@@ -77,6 +80,7 @@ torque since it was visually seen that the provided servos were having some issu
 
 ## Hardware Components
 Please refer to the following link for the hardware parts:
+
 https://github.com/ME-405/The-Arm-Game/tree/main/Hardware_Components
 
 ## Video of Functioning Mechanism
