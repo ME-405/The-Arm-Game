@@ -1,11 +1,17 @@
 # The Arm Game
 
 Jacob Bograd, Nick De Simone, Horacio Albarran
+
 ![Poster](Images/THE_ARM_GAME_POSTER.png)
 
 ## Introduction
 
 Our 3D-printed robotic arm is manipulated using a game controller, where the goal in using the arm is to grab a ping-pong ball and drop it through the "catching tables". The game controller communicates to the host computer over a library obtained through GitHub, and the PC interprets the controller inputs as desired end effector locations and sends them to a l476RG Nucleo. The Nucleo reads the given input arguments as x,y, and z-coordinates and transforms them into respective motor PWM values, which correspond to necessary angular positions for the servos. The Nucleo also sends the DC motor's encoder values back to the computer. All of the calculations are handled on the computer side, such that the Nucleo only sets PWM values for the respective motor and/or servos in order to get to the specified position for the claw at the end of the robotic arm. 
+
+## Demonstration Video
+The following video shows the functioning mechanism: 
+
+https://user-images.githubusercontent.com/97562028/157779387-043f62d6-f68d-46a5-b4d3-32e55e5b0366.mp4
 
 ## Documentation and Software Design
 
@@ -65,18 +71,21 @@ Pittperson Gearmotors
 
 https://www.ebay.com/itm/144350295705?hash=item219bf2b699:g:6eIAAOSwj59hzPha
 
-# Images
+# Gallery
 ## System Assembly
-The following images display an overview of the 3D printed hardware design. \
+The following images show an overview of the arm mechanism:
 
 ![Model](Images/system_assembly.JPG)
-Figure 1: Overall system assembly. Includes complete arm mechanism on the right and microcontroller stack to the left. \
+Figure 1: Overall system assembly. Complete arm mechanism shown to the right and microcontroller stack to the left. 
+
 
 ![Model Back](Images/motor_mounting.JPG)
-Figure 2: Servo locations. \
+Figure 2: Servo locations. 
+
 
 ![Model Back](Images/inside_base.jpg)
-Figure 3: Open-view of the base. Note (1) the internal DC-motor, which mates to the waist's gear with a 7:1 gear ratio and (2) the center-most shaft for mounting of the arm/waist assemblies.
+Figure 3: Open-view of the base. Note (1) the internal vertically-mounted DC-motor, which mates to the waist's gear with a 7:1 gear ratio, and (2) the center-most shaft for mounting of the arm/waist assemblies to the base.
+
 
 ## Catching Table Sketch
 The following model was constructed to be able to catch the ping-pong ball in an effective manner.
@@ -115,11 +124,6 @@ control gripper pitch and close without issue.
 Please refer to the following link for the 3D-printed structual components:
 
 https://github.com/ME-405/The-Arm-Game/tree/main/Hardware_Components
-
-## Video of Functioning Mechanism
-The following video provides with the final functioning of the mechanism: 
-
-https://user-images.githubusercontent.com/97562028/157779387-043f62d6-f68d-46a5-b4d3-32e55e5b0366.mp4
 
 
 
