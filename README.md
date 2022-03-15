@@ -29,7 +29,7 @@ PROBABLY DONT NEED THIS SECTION. IT IS NOT CORRECT ANYMORE, WE DID NOT ZERO THE 
 The arm will contain a calibrate function that will zero the base. Once the base is calibrated the arm will go to the minimum value and set the encoder value to be zero in order to the to a position specified as "its origin" initial position.
 
 
-## Wiring Keys
+## Wiring Key
 ### Power
 Red electrical Tape - 12V Motor \
 Yellow electrical Tape - 7V Servo \
