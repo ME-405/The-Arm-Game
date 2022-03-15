@@ -23,7 +23,7 @@ PROBABLY DONT NEED THIS SECTION. IT IS NOT CORRECT ANYMORE, WE DID NOT ZERO THE 
 The arm will contain a calibrate function that will zero the base. Once the base is calibrated the arm will go to the minimum value and set the encoder value to be zero in order to the to a position specified as "its origin" initial position.
 
 
-## Cable Color Code
+## Wiring Keys
 ### Power
 Red electrical Tape - 12V Motor \
 Yellow electrical Tape - 7V Servo \
@@ -65,12 +65,13 @@ Pittperson Gearmotors
 
 https://www.ebay.com/itm/144350295705?hash=item219bf2b699:g:6eIAAOSwj59hzPha
 
-# System Sketch
-The following images display an overview of the hardware design which was 3D printed
+# Images
+## System Assembly
+The following images display an overview of the 3D printed hardware design. 
 ![Model](Images/rough_model.png)
 ![Model Back](Images/rough_model_back.png)
 
-# Catching Table Sketch
+## Catching Table Sketch
 The following model was constructed to be able to catch the ping-pong ball in an effective manner.
 ![Model](Images/Table_Design.png)
 
