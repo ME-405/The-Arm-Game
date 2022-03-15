@@ -76,6 +76,7 @@ Figure 3: Open-view of the base. Note (1) the internal vertically-mounted DC-mot
 ## Catching Table Sketch
 The following model was constructed to be able to catch the ping-pong ball in an effective manner.
 ![Model](Images/Table_Design.png)
+Figure 4: Model used for the Table hardware.
 
 # Testing
 System testing allowed us to observe physical constraints of the assembly and control them accordingly.
