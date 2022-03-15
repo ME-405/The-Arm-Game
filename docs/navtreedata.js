@@ -24,7 +24,7 @@
 */
 var NAVTREE =
 [
-  [ "The Arm Game", "index.html", [
+  [ "ME-405 Term Project", "index.html", [
     [ "Introduction", "index.html#sec_intro", null ],
     [ "Software Design", "index.html#sec_Software_Design", null ],
     [ "Software Design Analysis", "index.html#sec_Design_Analysis", null ],
@@ -55,7 +55,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-""
+"_motor_8py.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

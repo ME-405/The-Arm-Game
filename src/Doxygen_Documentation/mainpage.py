@@ -30,11 +30,13 @@ the Nucleo will only be setting the PWM values for the respective motors.
 
 @section page_FSM The Arm Game Finite State Machine
 The following Finite State diagrams gives a visual representation of the functioning of the code implemented for The Arm Game
-@image html intinal_fsm.png width=600px
+
+@image html FSM.png width=600px
 
 @section page_State_Diagram The Arm Game State Diagram
 The following image provides with the require task for The Arm Game to function
-@image html 405_term_task_diagram.png width=600px
+
+@image html Task_Diagram_NEW.png width=600px
 
 @section page_Analysis_src The Arm Game Source Code Access
 You can find the source for The Arm Game sequence code in the following link:
