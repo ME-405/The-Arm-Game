@@ -2,7 +2,6 @@ import pygame
 import serial
 import time
 
-# TODO MAKE THIS OUR OWN CODE THIS IS EXAMPLE CODE
 
 # constants
 XLIMIT = 4.65 * 2
@@ -10,7 +9,6 @@ YLIMIT = 4.65 * 2
 ZLIMIT = 4.65 * 2
 debug = False
 ACK = True
-# setup the UART
 try:
     uart_to_micro = serial.Serial(port='COM5', baudrate=115200, timeout=0)
     # reset the Microcontroller

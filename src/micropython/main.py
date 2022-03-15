@@ -50,29 +50,29 @@ def main():
     calculate = arm.calculate_parameters()
     update = arm.update_parameters()
     clc = arm.clc.control_algorithm()
-    # cotask.task_list.append(read_task)
-    # cotask.task_list.append(calculate_task)
-    # cotask.task_list.append(update_task)
-    # cotask.task_list.append(clc_task)
+    cotask.task_list.append(read_task)
+    cotask.task_list.append(calculate_task)
+    cotask.task_list.append(update_task)
+    cotask.task_list.append(clc_task)
 
     gc.collect()
     # run the garbage collector
 
-    # run the scheduler with round-robin since everything is the same\
+    # run the scheduler
     print("hello Computer")
     while True:
-        next(read)
+        # next(read)
         # print("calculating")
-        next(calculate)
+        # next(calculate)
         # print("Updating")
-        next(update)
+        # next(update)
         # print("clc")
-        #print(f"MCU DEBUG: error: {arm.clc.send_error}, actuation: {arm.clc.send_actuation}, current pos {arm.clc.encoder.current_pos}, final pos {arm.clc.final_point}")
-       # for i in range(1, 10):
-        next(clc)
-        # cotask.task_list.pri_sched()  # this will never end, I think this is fine
-
-    print("Look All Done")
+        # print(f"MCU DEBUG: error: {arm.clc.send_error}, actuation: {arm.clc.send_actuation}, current pos {arm.clc.encoder.current_pos}, final pos {arm.clc.final_point}")
+        # for i in range(1, 10):
+        # next(clc)
+        # Everything above this is DEBUG
+        cotask.task_list.pri_sched()  #Grab another cotask
+    print("Look All Done")  # DEBUG, this will not happen
 
 
 class RoboticArm:
@@ -105,20 +105,12 @@ class RoboticArm:
         motorTimer = pyb.Timer(5, freq=20000)
         Motor = MotorDriver(motorEnable1, motor1Pin1, motor1Pin2, motorTimer, 1, 2)
 
-        # Conditions for UART  # TODO REMVOE THIS SECTION
-       # self.uart_channel = uart_channel
-       # self.baudrate = baudrate
-
         # Conditionals for the USB coms
         self.serial_stream = USB_VCP()
         self.nb_in = NB_Input(self.serial_stream, echo=False)
 
         # now setup all of the class variables
 
-        # TODO remvoe THE UART
-       # self.uart = UART(self.uart_channel,
-          #              self.baudrate)  # create a new UART connection with the specified channel and buadrate
-       # self.uart.init(115200)
 
         self.clc = ClosedLoop(EncoderDriver, Motor)  # make a new closed loop controller
         # self.command = [1, 0.1, 0.1, 100, 60]  #DEBUG
@@ -136,28 +128,20 @@ class RoboticArm:
         # self.mail = True # DEBUG
         self.mail = False  # we do not have any mail from the computer
         self.VCF = ElArAngles()  # make the Vector Coordinate Function
-        # TODO FIND THE CONVERSION FACTOR
         self.conversion_factor = 319  # The conversion factor from angle to encoder ticks
 
     # TODO ADD DOXY
     def read_uart(self):
         while True:
             if self.nb_in.any():
-            #if True:
+                # if True:
                 # if self.uart.any():  # check if there is something in the pipeline
-                # TODO MAKE IT BE ABLE TO HANDLE BAD COMMANDS
                 command_string = self.nb_in.get().split(',')  # read in the command and split on ,
-                # command_string = self.uart.read().decode('ascii').strip().split(
-                #    ',')  # read the entire UART buss and split on ,
-                # print(command_string)
-                # print(command_string)
                 self.command = [float(coordinate) for coordinate in command_string]  # convert the string list to float
-                #print(f"Thank You")  # tell the computer you received the packet and it can send another one. TODO CHECK IF
-                # NECESSARY
                 print("ACK")  # we acknowledge
                 self.mail = True  # we have some mail to sort through
             else:
-               # print("No Mail")
+                # print("No Mail") # DEBUG
                 self.mail = False  # we have no new mail
             yield 0  # let another task have its turn in the spotlight
 
@@ -168,11 +152,9 @@ class RoboticArm:
             if self.mail:  # only calculate parameters if there is something that we need to do
                 #  Get the base angle
                 #  Ange = arctan(y/x)
-                #  TODO CHECK ARCTAN CAN GET ALL ANGLES
                 radians = math.atan2(self.command[1], self.command[0])  # get the angle in radians
-                # TODO CHECK THAT THIS FORMULA IS CORRECT
                 self.endpoint = radians * self.conversion_factor * 180 / math.pi  # convert the angle to encoder ticks
-                #radius = math.sqrt(self.command[0]**2 + self.command[1]**2)
+                # radius = math.sqrt(self.command[0]**2 + self.command[1]**2)
                 self.VCF.set_angles(self.command[1], self.command[2])  # update the VCF with the new angles
                 self.VCF.run()  # Have the VCF calculate the new angles
 
@@ -182,7 +164,6 @@ class RoboticArm:
                 # print(self.angles[1])  # DEBUG
                 # The claw close and pitch are given as angles
 
-                # TODO CHECK IF THESE SERVOS ARE INVERTED
                 self.angles[2] = 180 - self.command[3]  # get the claw pitch value
                 self.angles[3] = self.command[4]  # get the claw close value
                 self.new_values = True
@@ -197,7 +178,6 @@ class RoboticArm:
                 self.servo2.SetAngle(self.angles[2])
                 self.servo3.SetAngle(self.angles[3])
                 # update the base endpoint
-                #print("New Endpoint = " + str(self.endpoint))
                 self.clc.final_point = self.endpoint
                 # print(f"angle0 {self.angles[0]} angle1 {self.angles[1]} angle2 {self.angles[2]} angle3 {self.angles[3]}")
             else:
@@ -208,7 +188,7 @@ class RoboticArm:
     def clc_passthrough(self):
         self.clc.control_algorithm()
 
-    def zero_encoder(self):  # TODO CHECK IS THIS IS NESSARY
+    def zero_encoder(self):
         '''!
         @brief This resets the encoder value in the clc to 0, for use in case of a failure and without a hardware reset
         '''
