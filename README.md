@@ -1,6 +1,6 @@
 # The Arm Game
 
-Jacob Bograd, Nick De Simone, Horacio Albarran
+Jacob Bograd, Nicholas De Simone, Horacio Albarran
 
 ![Poster](Images/THE_ARM_GAME_POSTER.png)
 
@@ -20,13 +20,6 @@ On the other hand, there is one required file on the computer side in order to o
 For further information, please refer to the following link for any documentation regarding "The Arm Game" project:
 
 https://me-405.github.io/The-Arm-Game/
-
-
-## Calibration
-!! \
-PROBABLY DONT NEED THIS SECTION. IT IS NOT CORRECT ANYMORE, WE DID NOT ZERO THE BASE \
-!! \
-The arm will contain a calibrate function that will zero the base. Once the base is calibrated the arm will go to the minimum value and set the encoder value to be zero in order to the to a position specified as "its origin" initial position.
 
 
 ## Wiring Key
@@ -63,13 +56,6 @@ PC7 - Servo3
 | 10+  | Assorted metric bolt and nuts        | Ace Hardware          |     -     |
 |  1   | Ping-Pong ball                       | Found                 |     -     |
 
-# Part List
-!! \
-PROBABLY DONT NEED THIS SECTION, IF WE KEEP IT WE SHOULD INCLUDE THE REST OF THE PARTS \
-!! \
-Pittperson Gearmotors 
-
-https://www.ebay.com/itm/144350295705?hash=item219bf2b699:g:6eIAAOSwj59hzPha
 
 # Gallery
 ## System Assembly
