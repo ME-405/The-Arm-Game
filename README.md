@@ -1,7 +1,7 @@
 # The Arm Game
 
 Jacob Bograd, Nick De Simone, Horacio Albarran
-![Poster](Images/THE ARM GAME POSTER.png)
+![Poster](Images/THE_ARM_GAME_POSTER.png)
 
 ## Introduction
 
@@ -17,9 +17,9 @@ https://me-405.github.io/The-Arm-Game/
 
 
 ## Calibration
-!! 
-PROBABLY DONT NEED THIS SECTION. IT IS NOT CORRECT ANYMORE, WE DID NOT ZERO THE BASE
-!!
+!! \
+PROBABLY DONT NEED THIS SECTION. IT IS NOT CORRECT ANYMORE, WE DID NOT ZERO THE BASE \
+!! \
 The arm will contain a calibrate function that will zero the base. Once the base is calibrated the arm will go to the minimum value and set the encoder value to be zero in order to the to a position specified as "its origin" initial position.
 
 
@@ -58,9 +58,9 @@ PC7 - Servo3
 |  1   | Ping-Pong ball                       | Found                 |     -     |
 
 # Part List
-!!
-PROBABLY DONT NEED THIS SECTION, IF WE KEEP IT WE SHOULD INCLUDE THE REST OF THE PARTS
-!!
+!! \
+PROBABLY DONT NEED THIS SECTION, IF WE KEEP IT WE SHOULD INCLUDE THE REST OF THE PARTS \
+!! \
 Pittperson Gearmotors 
 
 https://www.ebay.com/itm/144350295705?hash=item219bf2b699:g:6eIAAOSwj59hzPha
@@ -68,11 +68,11 @@ https://www.ebay.com/itm/144350295705?hash=item219bf2b699:g:6eIAAOSwj59hzPha
 # Images
 ## System Assembly
 The following images display an overview of the 3D printed hardware design. 
-![Model](Images/system assembly.png)
+![Model](Images/system_assembly.JPG)
 Figure 1: Overall system assembly. Includes complete arm mechanism on the right and microcontroller stack to the left.
-![Model Back](Images/motor mounting.png)
+![Model Back](Images/motor_mounting.JPG)
 Figure 2: Servo locations.
-![Model Back](Images/inside base.png)
+![Model Back](Images/inside_base.JPG)
 Figure 3: Open-view of the base. Note (1) the internal DC-motor, which mates to the waist's gear with a 7:1 gear ratio and (2) the center-most shaft for mounting of the arm/waist assemblies.
 
 ## Catching Table Sketch
