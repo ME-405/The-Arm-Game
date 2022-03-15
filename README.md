@@ -1,6 +1,7 @@
 # The Arm Game
 
 Jacob Bograd, Nick De Simone, Horacio Albarran
+![Model](Images/THE ARM GAME POSTER.png)
 
 ## Documentation and Software Design
 
