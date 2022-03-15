@@ -1,14 +1,14 @@
 # The Arm Game
 
 Jacob Bograd, Nick De Simone, Horacio Albarran
-![Model](Images/THE ARM GAME POSTER.png)
+
 
 ## Documentation and Software Design
 
 There are ten .py files needed to be residing on the micro-controller side in order for it to function ideally. Such files allow for closed loop control of the used motor as well as providing with the required calculations in order to operate the arm, elbow, and clamping mechanism of the links.  
 On the other hand, there is one required file on the computer side in order to open the console for the game controller to be used and provide with the desired x,y, and z-coordinates of the desired point in space where the claw must be located in order to grab the desired object, in this case, a ping-pong ball.
 For further information, please refer to the following link for any documentation regarding "The Arm Game" project:
-
+![Model](Images/THE ARM GAME POSTER.png)
 https://me-405.github.io/The-Arm-Game/
 
 ## Introduction
