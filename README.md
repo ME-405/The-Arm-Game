@@ -1,6 +1,6 @@
 # The Arm Game
 
-Jacob Bograd, Nick De Simone, Horacio Albarran
+Jacob Bograd, Nicholas De Simone, Horacio Albarran
 
 ![Poster](Images/THE_ARM_GAME_POSTER.png)
 
