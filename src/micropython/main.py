@@ -39,11 +39,11 @@ def main():
                              name="Queue")
     per_val = 5
     read_task = cotask.Task(arm.read_uart, name='read', priority=1, period=per_val, profile=False, trace=False)
-    calculate_task = cotask.Task(arm.calculate_parameters, name='calculate', priority=1, period=per_val, profile=False,
+    calculate_task = cotask.Task(arm.calculate_parameters, name='calculate', priority=2, period=per_val, profile=False,
                                  trace=False)
-    update_task = cotask.Task(arm.update_parameters, name='update', priority=1, period=per_val, profile=False,
+    update_task = cotask.Task(arm.update_parameters, name='update', priority=2, period=per_val, profile=False,
                               trace=False)
-    clc_task = cotask.Task(arm.clc.control_algorithm, name='clc', priority=1, period=per_val, profile=False,
+    clc_task = cotask.Task(arm.clc.control_algorithm, name='clc', priority=3, period=per_val, profile=False,
                            trace=False)
     # append all the tasks to the task list
     read = arm.read_uart()
